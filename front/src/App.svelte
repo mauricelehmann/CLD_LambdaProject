@@ -7,16 +7,24 @@
 		// TODO
 		info = "processing"
 		
-		var fileURL = window.URL.createObjectURL(files[0]);
 		var fileLink = document.createElement('a');
+		
 
-		fileLink.href = fileURL;
-		fileLink.setAttribute('download', 'file.pdf');
-		document.body.appendChild(fileLink);
+		//Send file to the compress backend api
+		var data = new FormData()
+		data.append('toCompressfile', files[0])
+		const res = await fetch('http://localhost:3000/compress', { method: 'POST',
+			body: data
+		}).then( res => res.blob() )
+  		.then( blob => {
+    		var fileURL = window.URL.createObjectURL(blob);
+			fileLink.href = fileURL;
+			fileLink.setAttribute('download', files[0].name + '.xz');
+			document.body.appendChild(fileLink);
 
-		fileLink.click();
-		info = "done"
-
+			fileLink.click();
+			info = "done"
+ 		 });
 	}
 </script>
 
