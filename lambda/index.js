@@ -13,19 +13,21 @@ exports.handler = async (event) => {
     
     const result = await parser.parse(event);
 
-    console.log("result: " + JSON.stringify(result))
 
     var file = result.files[0].content
-    console.log("file: " + file)
 
+    if(!file)
+    return {
+        statusCode: "404",
+        body: "File was not found"
+    }
 
     var compressedFile = await compress(file)
-    console.log("compressed file: " + compressedFile)
 
     const response = {
         statusCode: "200",  
         headers: {
-            'content-type': "text/plain"  
+            'content-type': "application/x-7z-compressed"  
         },                     
         body: compressedFile.toString('base64'),       // a JSON string.
         isBase64Encoded:  true     // for binary support
@@ -35,11 +37,6 @@ exports.handler = async (event) => {
 
 
 async function compress(file){
-    
-    if(!file)
-    {
-        return "File was not found";
-    }
     
     return lzma.compress(file);
 }
