@@ -9,11 +9,11 @@
 		
 		var fileLink = document.createElement('a');
 		
-
+			//https://98nq7nz23b.execute-api.us-east-1.amazonaws.com/default/compress
 		//Send file to the compress backend api
 		var data = new FormData()
 		data.append('toCompressfile', files[0])
-		const res = await fetch('http://localhost:3000/compress', { method: 'POST',
+		const res = await fetch('https://98nq7nz23b.execute-api.us-east-1.amazonaws.com/default/compress', { method: 'POST',
 			body: data
 		}).then( res => res.blob() )
   		.then( blob => {
